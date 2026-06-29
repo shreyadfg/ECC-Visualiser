@@ -1,61 +1,156 @@
 # ECC Playground
 
-ECC Playground is a Python implementation of the fundamental building blocks of Elliptic Curve Cryptography (ECC). The goal of this project is to understand how modern public-key cryptography works by implementing the underlying mathematics instead of relying on existing cryptographic libraries.
+An educational implementation of **Elliptic Curve Cryptography (ECC)** in Python built from first principles.
 
-The project includes implementations of point arithmetic, ECC key generation, ElGamal encryption, ECDSA signatures, ECDH key exchange, and an interactive GUI for experimenting with these operations and visualizing elliptic curves.
+This project explores the mathematics behind elliptic curve cryptography by implementing the core algorithms used in modern public-key systems instead of relying on existing cryptographic libraries. It includes implementations of point arithmetic, ECC key generation, ElGamal encryption, ECDSA digital signatures, Elliptic Curve Diffie-Hellman (ECDH), and an interactive GUI for visualizing elliptic curves over finite fields.
 
-> **Note:** This project uses a small toy curve for educational purposes only and should not be used in production environments.
+The implementation uses a small toy curve to make the underlying mathematics easy to inspect and understand.
+
+> **Disclaimer:** This project is intended for educational purposes only and should **not** be used for real-world cryptographic applications.
+
+---
+
+## Background
+
+Elliptic Curve Cryptography is based on the algebraic structure of curves defined over finite fields.
+
+For a prime field ( \mathbb{F}_p ), an elliptic curve is given by
+
+[
+y^2 \equiv x^3 + ax + b \pmod p
+]
+
+where
+
+[
+4a^3 + 27b^2 \not\equiv 0 \pmod p
+]
+
+to ensure that the curve is non-singular.
+
+ECC security relies on the **Elliptic Curve Discrete Logarithm Problem (ECDLP)**.
+
+Given
+
+[
+Q = dG
+]
+
+where
+
+* (G) is the generator point,
+* (d) is the private key,
+* (Q) is the public key,
+
+recovering (d) from (Q) is computationally infeasible for sufficiently large curves.
 
 ---
 
 ## Features
 
-- Elliptic Curve point addition and doubling
-- Scalar multiplication (Double-and-Add)
-- ECC public/private key generation
-- ElGamal encryption and decryption
-- ECDSA signature generation and verification
-- Elliptic Curve Diffie-Hellman (ECDH)
-- Finite-field elliptic curve visualization
-- Real-valued elliptic curve visualization
-- Interactive Tkinter playground
+### Core Elliptic Curve Arithmetic
+
+* Point addition
+* Point doubling
+* Scalar multiplication (Double-and-Add)
+* Modular inverse using the Extended Euclidean Algorithm
+* Point order computation
+
+### Cryptographic Algorithms
+
+* ECC key pair generation
+* ElGamal encryption
+* ElGamal decryption
+* ECDSA signature generation
+* ECDSA signature verification
+* Elliptic Curve Diffie-Hellman (ECDH)
+
+### Interactive GUI
+
+* Generate key pairs
+* Encode plaintext onto the curve
+* Encrypt and decrypt messages
+* Generate and verify signatures
+* Perform ECDH key exchange
+* Visualize finite-field elliptic curves
+* Visualize continuous real-valued elliptic curves
 
 ---
 
 ## Project Structure
 
-```
+```text
 ECC-Playground/
 ├── ecc_toy.py          # Core ECC implementation
-├── demo.py             # CLI demonstration
+├── demo.py             # Command-line demonstration
 ├── playground_gui.py   # Interactive GUI
+├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## Running the project
+## Example Curve
 
-Clone the repository
+The playground uses the toy curve
+
+[
+E : y^2 \equiv x^3 + x + 1 \pmod{233}
+]
+
+with generator point
+
+[
+G = (4,5)
+]
+
+The parameters are intentionally small so that every operation can be visualized and verified manually.
+
+---
+
+## Implemented Algorithms
+
+| Algorithm             | Status |
+| --------------------- | :----: |
+| Point Addition        |    ✅   |
+| Point Doubling        |    ✅   |
+| Scalar Multiplication |    ✅   |
+| ECC Key Generation    |    ✅   |
+| ElGamal Encryption    |    ✅   |
+| ElGamal Decryption    |    ✅   |
+| ECDSA                 |    ✅   |
+| ECDH                  |    ✅   |
+
+---
+
+## Getting Started
+
+### Clone the repository
 
 ```bash
 git clone https://github.com/shreyadfg/ECC-Visualiser.git
 cd ECC-Visualiser
 ```
 
-Install dependencies
+### Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+If you don't have a `requirements.txt` yet:
 
 ```bash
 pip install matplotlib numpy
 ```
 
-Run the command-line demo
+### Run the command-line demonstration
 
 ```bash
 python demo.py
 ```
 
-Launch the GUI
+### Launch the interactive GUI
 
 ```bash
 python playground_gui.py
@@ -63,66 +158,79 @@ python playground_gui.py
 
 ---
 
-## Algorithms Implemented
-
-| Algorithm | Status |
-|-----------|--------|
-| Point Addition | ✅ |
-| Point Doubling | ✅ |
-| Scalar Multiplication | ✅ |
-| Key Generation | ✅ |
-| ECC ElGamal | ✅ |
-| ECDSA | ✅ |
-| ECDH | ✅ |
-
----
-
 ## Visualizations
 
-The GUI includes two different views of elliptic curves.
+The application provides two complementary views of elliptic curves.
 
-- **Finite-field plot** showing the actual points used during ECC computations.
-- **Real-valued plot** to provide intuition behind the curve geometry.
+### Finite-Field Plot
 
-The application can also highlight generated keys, encoded messages, and ciphertext points.
+Displays the discrete set of points satisfying the curve equation over the finite field ( \mathbb{F}_p ). This represents the actual points used during ECC computations.
+
+### Real-Valued Plot
+
+Displays the continuous curve
+
+[
+y^2 = x^3 + ax + b
+]
+
+to provide geometric intuition before transitioning to finite-field arithmetic.
 
 ---
 
 ## Technologies
 
-- Python
-- Tkinter
-- NumPy
-- Matplotlib
-- hashlib
+* Python
+* Tkinter
+* NumPy
+* Matplotlib
+* hashlib
+* dataclasses
 
 ---
 
 ## Limitations
 
-This implementation prioritizes readability over performance and security.
+This implementation prioritizes readability and educational value over performance.
 
-Some simplifications include:
+Current limitations include:
 
-- Small toy curve parameters
-- Simple message-to-point encoding
-- No side-channel protections
-- Not compatible with standardized curves such as secp256r1 or Curve25519
+* Toy curve parameters
+* Affine coordinates only
+* Simplified message-to-point encoding
+* No constant-time operations
+* No side-channel resistance
+* Not compatible with standard curves such as secp256r1 or Curve25519
 
 ---
 
-## Future Work
+## Future Improvements
 
-- Standard curve support
-- Jacobian coordinates
-- Deterministic ECDSA (RFC 6979)
-- ECIES implementation
-- Point compression
-- Performance benchmarking
-- Unit tests
+* Jacobian coordinates
+* Montgomery ladder scalar multiplication
+* Standard NIST and SEC curves
+* RFC 6979 deterministic ECDSA
+* Point compression
+* ECIES implementation
+* Unit tests
+* Performance benchmarking
+* Web-based interactive playground
+
+---
+
+## References
+
+* *Guide to Elliptic Curve Cryptography* — Hankerson, Menezes & Vanstone
+* *An Introduction to Mathematical Cryptography* — Hoffstein, Pipher & Silverman
+* SEC 1: Elliptic Curve Cryptography Standards
+* NIST FIPS 186-5 Digital Signature Standard
 
 ---
 
 ## License
 
-This project is intended for educational purposes.
+This repository is released under the MIT License.
+
+---
+
+If you find a bug, have suggestions, or would like to contribute, feel free to open an issue or submit a pull request.
