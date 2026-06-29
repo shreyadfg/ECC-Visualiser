@@ -1,48 +1,46 @@
-# ECC Playground
+# ECC Visualiser
 
 An educational implementation of **Elliptic Curve Cryptography (ECC)** in Python built from first principles.
 
 This project explores the mathematics behind elliptic curve cryptography by implementing the core algorithms used in modern public-key systems instead of relying on existing cryptographic libraries. It includes implementations of point arithmetic, ECC key generation, ElGamal encryption, ECDSA digital signatures, Elliptic Curve Diffie-Hellman (ECDH), and an interactive GUI for visualizing elliptic curves over finite fields.
 
-The implementation uses a small toy curve to make the underlying mathematics easy to inspect and understand.
+The implementation uses a small toy curve so that every cryptographic operation can be inspected and understood mathematically.
 
-> **Disclaimer:** This project is intended for educational purposes only and should **not** be used for real-world cryptographic applications.
+> **Disclaimer:** This project is intended for educational purposes only and should **not** be used for production cryptography.
 
 ---
 
 ## Background
 
-Elliptic Curve Cryptography is based on the algebraic structure of curves defined over finite fields.
+Elliptic Curve Cryptography operates over a finite field `Fp`, where all arithmetic is performed modulo a prime number `p`.
 
-For a prime field ( \mathbb{F}_p ), an elliptic curve is given by
+An elliptic curve is defined by the equation
 
-[
-y^2 \equiv x^3 + ax + b \pmod p
-]
+```text
+y² = x³ + ax + b  (mod p)
+```
 
-where
+where the parameters satisfy
 
-[
-4a^3 + 27b^2 \not\equiv 0 \pmod p
-]
+```text
+4a³ + 27b² ≠ 0  (mod p)
+```
 
-to ensure that the curve is non-singular.
+to ensure the curve has no singularities.
 
-ECC security relies on the **Elliptic Curve Discrete Logarithm Problem (ECDLP)**.
+A user's public key is generated through scalar multiplication
 
-Given
-
-[
-Q = dG
-]
+```text
+Q = d × G
+```
 
 where
 
-* (G) is the generator point,
-* (d) is the private key,
-* (Q) is the public key,
+* `G` is the generator point
+* `d` is the private key
+* `Q` is the corresponding public key
 
-recovering (d) from (Q) is computationally infeasible for sufficiently large curves.
+The security of ECC relies on the **Elliptic Curve Discrete Logarithm Problem (ECDLP)**—given only `G` and `Q`, determining the private key `d` is computationally infeasible for appropriately chosen curves.
 
 ---
 
@@ -52,7 +50,7 @@ recovering (d) from (Q) is computationally infeasible for sufficiently large cur
 
 * Point addition
 * Point doubling
-* Scalar multiplication (Double-and-Add)
+* Scalar multiplication using the Double-and-Add algorithm
 * Modular inverse using the Extended Euclidean Algorithm
 * Point order computation
 
@@ -80,7 +78,7 @@ recovering (d) from (Q) is computationally infeasible for sufficiently large cur
 ## Project Structure
 
 ```text
-ECC-Playground/
+ECC-Visualiser/
 ├── ecc_toy.py          # Core ECC implementation
 ├── demo.py             # Command-line demonstration
 ├── playground_gui.py   # Interactive GUI
@@ -90,21 +88,20 @@ ECC-Playground/
 
 ---
 
-## Example Curve
+## Toy Curve Parameters
 
-The playground uses the toy curve
+The playground uses the following curve:
 
-[
-E : y^2 \equiv x^3 + x + 1 \pmod{233}
-]
+```text
+Curve:
+y² = x³ + x + 1  (mod 233)
 
-with generator point
+Prime (p):      233
+Generator (G):  (4, 5)
+Order (n):      233
+```
 
-[
-G = (4,5)
-]
-
-The parameters are intentionally small so that every operation can be visualized and verified manually.
+These intentionally small parameters make it possible to manually verify computations and visualize the underlying group operations.
 
 ---
 
@@ -160,21 +157,21 @@ python playground_gui.py
 
 ## Visualizations
 
-The application provides two complementary views of elliptic curves.
+The application provides two complementary visualizations of elliptic curves.
 
-### Finite-Field Plot
+### Finite-Field View
 
-Displays the discrete set of points satisfying the curve equation over the finite field ( \mathbb{F}_p ). This represents the actual points used during ECC computations.
+Displays every valid point satisfying the curve equation over `Fp`. This is the discrete point set used during ECC computations and highlights generator points, encoded messages, and ciphertext points.
 
-### Real-Valued Plot
+### Real-Valued View
 
 Displays the continuous curve
 
-[
-y^2 = x^3 + ax + b
-]
+```text
+y² = x³ + ax + b
+```
 
-to provide geometric intuition before transitioning to finite-field arithmetic.
+to provide geometric intuition before introducing finite-field arithmetic.
 
 ---
 
@@ -191,30 +188,30 @@ to provide geometric intuition before transitioning to finite-field arithmetic.
 
 ## Limitations
 
-This implementation prioritizes readability and educational value over performance.
+This implementation prioritizes readability and educational value over performance or security.
 
 Current limitations include:
 
 * Toy curve parameters
-* Affine coordinates only
+* Affine coordinate representation
 * Simplified message-to-point encoding
-* No constant-time operations
-* No side-channel resistance
-* Not compatible with standard curves such as secp256r1 or Curve25519
+* No side-channel protections
+* No constant-time arithmetic
+* Not compatible with standard curves such as `secp256r1`, `secp256k1`, or `Curve25519`
 
 ---
 
 ## Future Improvements
 
+* Support for standard NIST and SEC curves
 * Jacobian coordinates
 * Montgomery ladder scalar multiplication
-* Standard NIST and SEC curves
 * RFC 6979 deterministic ECDSA
 * Point compression
 * ECIES implementation
-* Unit tests
+* Unit testing
 * Performance benchmarking
-* Web-based interactive playground
+* Browser-based interactive visualizer
 
 ---
 
@@ -222,15 +219,11 @@ Current limitations include:
 
 * *Guide to Elliptic Curve Cryptography* — Hankerson, Menezes & Vanstone
 * *An Introduction to Mathematical Cryptography* — Hoffstein, Pipher & Silverman
-* SEC 1: Elliptic Curve Cryptography Standards
+* SEC 1: Elliptic Curve Cryptography
 * NIST FIPS 186-5 Digital Signature Standard
 
 ---
 
 ## License
 
-This repository is released under the MIT License.
-
----
-
-If you find a bug, have suggestions, or would like to contribute, feel free to open an issue or submit a pull request.
+This project is released under the MIT License.
