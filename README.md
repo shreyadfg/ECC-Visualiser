@@ -39,8 +39,8 @@ ECC-Playground/
 Clone the repository
 
 ```bash
-git clone https://github.com/<username>/ECC-Playground.git
-cd ECC-Playground
+git clone https://github.com/shreyadfg/ECC-Visualiser.git
+cd ECC-Visualiser
 ```
 
 Install dependencies
